@@ -9,28 +9,60 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="imageedit_2_3478557917.jpg">
     <style>
-        body { margin: 0; background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        .header { padding: 40px 20px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .counter-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .count-text { font-size: 80px; font-weight: 700; color: #FFD700; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; }
-        .card { background: #1c1c1c; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #333; }
-        .card img { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 8px; }
-        .main-btn { margin: 20px; padding: 25px; border-radius: 30px; background: #FFD700; color: #000; font-size: 20px; font-weight: bold; border: none; }
-        .main-btn:active { transform: scale(0.98); }
+        :root { --gold: #FFD700; --bg: #000000; }
+        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
+               height: 100vh; overflow: hidden; overscroll-behavior: none; user-select: none; }
+        
+        #app { display: flex; flex-direction: column; height: 100vh; padding-top: env(safe-area-inset-top); }
+        
+        .counter-box { flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #count { font-size: 120px; font-weight: 800; color: var(--gold); transition: transform 0.1s; }
+        
+        .tap-btn { margin: 20px 20px 40px; padding: 30px; background: var(--gold); color: black; border-radius: 40px; 
+                   font-size: 24px; font-weight: 900; border: none; box-shadow: 0 10px 20px rgba(255,215,0,0.3); }
+        .tap-btn:active { transform: scale(0.95); }
+        
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px; }
+        .card { background: #1a1a1a; border-radius: 16px; padding: 10px; text-align: center; }
+        .card img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
     </style>
 </head>
 <body>
-    <div class="header"><div>Jaap</div><button onclick="alert('History feature here')">History</button></div>
-    <div class="counter-container"><div id="count" class="count-text">0</div></div>
-    <div class="grid" id="grid"></div>
-    <button class="main-btn" onclick="count++">TAP TO COUNT</button>
+    <div id="app">
+        <div class="counter-box"><div id="count">0</div></div>
+        <div class="grid" id="grid"></div>
+        <button class="tap-btn" id="tapBtn">TAP TO COUNT</button>
+    </div>
+
     <script>
-        let count = 0;
+        let count = localStorage.getItem('jaapCount') || 0;
+        const countDisplay = document.getElementById('count');
+        const tapBtn = document.getElementById('tapBtn');
+        countDisplay.innerText = count;
+
+        tapBtn.addEventListener('click', () => {
+            count++;
+            localStorage.setItem('jaapCount', count);
+            countDisplay.innerText = count;
+            countDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => countDisplay.style.transform = 'scale(1)', 100);
+            if(navigator.vibrate) navigator.vibrate(50);
+        });
+
         const deities = ["brahma.jpeg", "ganesh.jpeg", "vishnu.jpeg", "durga.jpg", "shiva.jpeg", "satyam.jpeg"];
         const grid = document.getElementById('grid');
         deities.forEach(src => grid.innerHTML += `<div class="card"><img src="${src}"></div>`);
-        setInterval(() => document.getElementById('count').innerText = count, 100);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                reg.onupdatefound = () => {
+                    const worker = reg.installing;
+                    worker.onstatechange = () => {
+                        if (worker.state === 'installed') window.location.reload();
+                    };
+                };
+            });
+        }
     </script>
 </body>
 </html>
