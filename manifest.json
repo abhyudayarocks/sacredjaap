@@ -1,0 +1,9 @@
+{
+  "name": "Sacred Jaap",
+  "short_name": "SacredJaap",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [
+    { "src": "imageedit_2_3478557917.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}
