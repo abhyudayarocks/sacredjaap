@@ -3,9 +3,15 @@
   "short_name": "Jaap",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0f0f13",
+  "theme_color": "#0f0f13",
+  "orientation": "portrait",
   "icons": [
-    { "src": "imageedit_2_3478557917.jpg", "sizes": "512x512", "type": "image/jpeg" }
+    {
+      "src": "imageedit_2_3478557917.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
   ]
 }
