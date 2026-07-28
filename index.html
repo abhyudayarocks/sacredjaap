@@ -21,7 +21,7 @@
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         
-        /* THE ULTIMATE LOCK: Kills all browser scrolling, bouncing, and pull-to-refresh */
+        /* Locks the screen completely without squishing content */
         body, html {
             background-color: var(--bg);
             color: var(--text-main);
@@ -30,7 +30,7 @@
             width: 100vw;
             overflow: hidden;
             overscroll-behavior: none;
-            touch-action: none; /* <--- This is the magic lock */
+            touch-action: none; 
             display: flex;
             justify-content: center;
             user-select: none;
@@ -43,51 +43,64 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+            padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom));
             position: relative;
-            overflow: hidden; 
         }
 
         /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; padding: min(15px, 2vh) 0; font-size: 18px; font-weight: 500; }
+        .top-bar { display: flex; justify-content: space-between; padding: 10px 0 20px; font-size: 18px; font-weight: 500; }
         .save-log, .history { cursor: pointer; padding: 5px; }
         .save-log { color: #555555; transition: color 0.2s; }
         .save-log:active { color: var(--accent); }
         .history { color: #FFFFFF; }
         .history:active { opacity: 0.7; }
 
-        /* Cycles Header */
-        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .cycles-header { text-align: center; font-size: 13px; letter-spacing: 2px; color: var(--text-muted); }
-        .cycles-count { text-align: center; font-size: min(80px, 9vh); font-weight: 500; margin-top: -5px; }
+        /* Cycles Header - Fluid Sizing */
+        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .cycles-header { text-align: center; font-size: clamp(12px, 3vw, 14px); letter-spacing: 2px; color: var(--text-muted); }
+        .cycles-count { text-align: center; font-size: clamp(65px, 18vw, 90px); font-weight: 500; margin-top: -5px; }
 
-        /* Guru Section */
-        .guru-section { text-align: center; margin-bottom: min(15px, 2vh); }
+        /* Guru Section - Fluid Sizing */
+        .guru-section { text-align: center; margin-bottom: 25px; }
         .guru-img-wrapper {
-            position: relative; width: min(85px, 11vh); aspect-ratio: 1/1; margin: 0 auto min(10px, 1vh);
+            position: relative; 
+            width: clamp(75px, 20vw, 110px); /* Enlarges on phone, stops growing on iPad */
+            aspect-ratio: 1/1; 
+            margin: 0 auto 12px;
             border-radius: 50%; border: 2px dashed #666; padding: 4px;
         }
         .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .guru-text { color: var(--accent); font-size: min(16px, 2.2vh); font-weight: 600; }
+        .guru-text { color: var(--accent); font-size: clamp(15px, 4vw, 18px); font-weight: 600; }
 
-        /* Grid Section - Dynamically resizes to fit screen height */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(15px, 2vw); }
+        /* Grid Section - Expands perfectly on mobile */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: clamp(10px, 3vw, 15px); 
+            margin-bottom: auto; /* This magically pushes the buttons to the bottom! */
+        }
         @media (max-width: 320px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 12px; padding: min(10px, 1.5vh) 5px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card img { width: min(80px, 8.5vh); aspect-ratio: 1/1; border-radius: 50%; margin-bottom: min(8px, 1vh); object-fit: cover; }
-        .card-title { color: var(--accent); font-size: min(14px, 1.8vh); font-weight: bold; margin-bottom: 2px; }
-        .card-subtitle { color: #D1D1D1; font-size: min(11px, 1.3vh); margin-bottom: 4px; }
-        .card-text { color: var(--text-muted); font-size: min(11px, 1.3vh); line-height: 1.3; }
+        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: clamp(10px, 2.5vw, 15px) 5px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card img { 
+            width: clamp(65px, 18vw, 95px); /* Big and bold on phone */
+            aspect-ratio: 1/1; 
+            border-radius: 50%; 
+            margin-bottom: 10px; 
+            object-fit: cover; 
+        }
+        .card-title { color: var(--accent); font-size: clamp(13px, 3.5vw, 16px); font-weight: bold; margin-bottom: 3px; }
+        .card-subtitle { color: #D1D1D1; font-size: clamp(10px, 2.5vw, 12px); margin-bottom: 5px; }
+        .card-text { color: var(--text-muted); font-size: clamp(10px, 2.5vw, 12px); line-height: 1.4; }
 
         /* Buttons Section */
-        .controls { display: flex; gap: 15px; margin-top: auto; padding-top: min(15px, 2vh); }
-        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: min(18px, 2.2vh); font-weight: 600; cursor: pointer; }
+        .controls { display: flex; gap: 15px; margin-top: 25px; margin-bottom: 15px; }
+        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: 18px; border-radius: 14px; font-size: clamp(16px, 4vw, 18px); font-weight: 600; cursor: pointer; }
         .btn-reset { color: #FFFFFF; }
         .btn-fix { color: var(--red); }
         .control-btn:active { opacity: 0.7; transform: scale(0.98); }
         
-        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: min(22px, 3vh); border-radius: 18px; color: #FFFFFF; font-size: min(26px, 3vh); font-weight: bold; margin-top: min(15px, 2vh); cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); }
+        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: clamp(22px, 5vw, 26px); border-radius: 18px; color: #FFFFFF; font-size: clamp(22px, 5vw, 26px); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); }
         .tap-btn:active { transform: scale(0.97); }
 
         /* History Modal Overlay */
@@ -95,7 +108,7 @@
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: var(--bg); z-index: 1000; padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom));
             flex-direction: column;
-            touch-action: auto; /* Allows scrolling inside the history menu only */
+            touch-action: auto; 
         }
         .modal.active { display: flex; }
         .modal-header { display: flex; justify-content: space-between; padding: 15px 0; font-size: 20px; font-weight: bold; border-bottom: 1px solid #333; margin-bottom: 15px;}
@@ -109,7 +122,7 @@
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: #2C2C2E; color: white; padding: 16px 28px; border-radius: 30px;
             font-size: 16px; font-weight: bold; transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid #444;
+            z-index: 2000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid #444; width: max-content;
         }
         .toast.show { bottom: max(40px, env(safe-area-inset-bottom)); }
 
