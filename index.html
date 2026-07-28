@@ -21,8 +21,8 @@
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         
-        /* FIX 1: Locks the screen completely. No more bouncing or dragging the background. */
-        body {
+        /* THE ULTIMATE LOCK: Kills all browser scrolling, bouncing, and pull-to-refresh */
+        body, html {
             background-color: var(--bg);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -30,6 +30,7 @@
             width: 100vw;
             overflow: hidden;
             overscroll-behavior: none;
+            touch-action: none; /* <--- This is the magic lock */
             display: flex;
             justify-content: center;
             user-select: none;
@@ -44,14 +45,11 @@
             flex-direction: column;
             padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
             position: relative;
-            overflow-y: auto;
-            overscroll-behavior-y: contain;
-            scrollbar-width: none;
+            overflow: hidden; 
         }
-        .app-container::-webkit-scrollbar { display: none; }
 
         /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; padding: 15px 0; font-size: 18px; font-weight: 500; }
+        .top-bar { display: flex; justify-content: space-between; padding: min(15px, 2vh) 0; font-size: 18px; font-weight: 500; }
         .save-log, .history { cursor: pointer; padding: 5px; }
         .save-log { color: #555555; transition: color 0.2s; }
         .save-log:active { color: var(--accent); }
@@ -59,43 +57,45 @@
         .history:active { opacity: 0.7; }
 
         /* Cycles Header */
-        .cycles-header { text-align: center; font-size: 13px; letter-spacing: 2px; color: var(--text-muted); margin-top: 5px; }
-        .cycles-count { text-align: center; font-size: 80px; font-weight: 500; margin: -5px 0 15px 0; }
+        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .cycles-header { text-align: center; font-size: 13px; letter-spacing: 2px; color: var(--text-muted); }
+        .cycles-count { text-align: center; font-size: min(80px, 9vh); font-weight: 500; margin-top: -5px; }
 
         /* Guru Section */
-        .guru-section { text-align: center; margin-bottom: 25px; }
+        .guru-section { text-align: center; margin-bottom: min(15px, 2vh); }
         .guru-img-wrapper {
-            position: relative; width: 90px; aspect-ratio: 1/1; margin: 0 auto 12px;
-            border-radius: 50%; border: 2px dashed #666; padding: 5px;
+            position: relative; width: min(85px, 11vh); aspect-ratio: 1/1; margin: 0 auto min(10px, 1vh);
+            border-radius: 50%; border: 2px dashed #666; padding: 4px;
         }
         .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .guru-text { color: var(--accent); font-size: 16px; font-weight: 600; }
+        .guru-text { color: var(--accent); font-size: min(16px, 2.2vh); font-weight: 600; }
 
-        /* Grid Section */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; flex: 1; align-content: start; }
+        /* Grid Section - Dynamically resizes to fit screen height */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(15px, 2vw); }
         @media (max-width: 320px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card img { width: 85px; max-width: 100%; aspect-ratio: 1/1; border-radius: 50%; margin-bottom: 10px; object-fit: cover; }
-        .card-title { color: var(--accent); font-size: 15px; font-weight: bold; margin-bottom: 3px; }
-        .card-subtitle { color: #D1D1D1; font-size: 12px; margin-bottom: 6px; }
-        .card-text { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 12px; padding: min(10px, 1.5vh) 5px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card img { width: min(80px, 8.5vh); aspect-ratio: 1/1; border-radius: 50%; margin-bottom: min(8px, 1vh); object-fit: cover; }
+        .card-title { color: var(--accent); font-size: min(14px, 1.8vh); font-weight: bold; margin-bottom: 2px; }
+        .card-subtitle { color: #D1D1D1; font-size: min(11px, 1.3vh); margin-bottom: 4px; }
+        .card-text { color: var(--text-muted); font-size: min(11px, 1.3vh); line-height: 1.3; }
 
         /* Buttons Section */
-        .controls { display: flex; gap: 15px; margin: 20px 0; }
-        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: 18px; border-radius: 14px; font-size: 18px; font-weight: 600; cursor: pointer; }
+        .controls { display: flex; gap: 15px; margin-top: auto; padding-top: min(15px, 2vh); }
+        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: min(18px, 2.2vh); font-weight: 600; cursor: pointer; }
         .btn-reset { color: #FFFFFF; }
         .btn-fix { color: var(--red); }
         .control-btn:active { opacity: 0.7; transform: scale(0.98); }
         
-        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: 24px; border-radius: 18px; color: #FFFFFF; font-size: 26px; font-weight: bold; margin-bottom: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); }
+        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: min(22px, 3vh); border-radius: 18px; color: #FFFFFF; font-size: min(26px, 3vh); font-weight: bold; margin-top: min(15px, 2vh); cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); }
         .tap-btn:active { transform: scale(0.97); }
 
-        /* FIX 2: Custom Native-Style Modal for History (No more absolute positioning cut-offs) */
+        /* History Modal Overlay */
         .modal {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: var(--bg); z-index: 1000; padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom));
             flex-direction: column;
+            touch-action: auto; /* Allows scrolling inside the history menu only */
         }
         .modal.active { display: flex; }
         .modal-header { display: flex; justify-content: space-between; padding: 15px 0; font-size: 20px; font-weight: bold; border-bottom: 1px solid #333; margin-bottom: 15px;}
@@ -104,7 +104,7 @@
         .history-item { background: var(--card-bg); padding: 18px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; border: 1px solid #333; font-size: 16px;}
         .clear-history { padding: 18px; background: var(--red); color: white; border: none; border-radius: 14px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer;}
 
-        /* FIX 3: Custom Toast and Confirm UI (Replaces ugly browser alerts) */
+        /* Custom Toast and Confirm UI */
         .toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: #2C2C2E; color: white; padding: 16px 28px; border-radius: 30px;
@@ -118,6 +118,7 @@
             background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             z-index: 2000; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.2s;
+            touch-action: none;
         }
         .confirm-overlay.active { display: flex; opacity: 1; }
         .confirm-box {
@@ -140,8 +141,10 @@
             <span class="history" id="openHistoryBtn">History</span>
         </div>
         
-        <div class="cycles-header">TOTAL CYCLES</div>
-        <div class="cycles-count" id="countDisplay">0</div>
+        <div class="cycles-wrapper">
+            <div class="cycles-header">TOTAL CYCLES</div>
+            <div class="cycles-count" id="countDisplay">0</div>
+        </div>
 
         <div class="guru-section">
             <div class="guru-img-wrapper"><img src="master_guru.jpeg" alt="Guru"></div>
@@ -225,7 +228,7 @@
         const historyModal = document.getElementById('historyModal');
         const historyList = document.getElementById('historyList');
         
-        // Custom UI Functions (Replaces alerts)
+        // Custom UI Functions
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
