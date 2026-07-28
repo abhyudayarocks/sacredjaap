@@ -9,32 +9,168 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="imageedit_2_3478557917.jpg">
     <style>
-        :root { --gold: #FFD700; --bg: #000000; }
-        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
-               height: 100vh; overflow: hidden; overscroll-behavior: none; user-select: none; }
-        
-        #app { display: flex; flex-direction: column; height: 100vh; padding-top: env(safe-area-inset-top); }
-        
-        .counter-box { flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        #count { font-size: 120px; font-weight: 800; color: var(--gold); transition: transform 0.1s; }
-        
-        .tap-btn { margin: 20px 20px 40px; padding: 30px; background: var(--gold); color: black; border-radius: 40px; 
-                   font-size: 24px; font-weight: 900; border: none; box-shadow: 0 10px 20px rgba(255,215,0,0.3); }
-        .tap-btn:active { transform: scale(0.95); }
-        
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px; }
-        .card { background: #1a1a1a; border-radius: 16px; padding: 10px; text-align: center; }
-        .card img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --accent: #FF9933;
+            --text-main: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            overscroll-behavior-y: none;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .counter-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #countDisplay {
+            font-size: 110px;
+            font-weight: 800;
+            text-shadow: 0px 0px 30px rgba(255, 153, 51, 0.4);
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .grid-container {
+            padding: 0 20px 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .deity-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 15px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .deity-card img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .button-section {
+            padding: 20px 20px 40px;
+        }
+
+        .tap-btn {
+            width: 100%;
+            padding: 25px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #FF9933, #FF4500);
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(255, 69, 0, 0.4);
+            transition: all 0.1s ease;
+        }
+
+        .tap-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+        }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div class="counter-box"><div id="count">0</div></div>
-        <div class="grid" id="grid"></div>
-        <button class="tap-btn" id="tapBtn">TAP TO COUNT</button>
+
+    <div class="header">SACRED JAAP</div>
+
+    <div class="counter-section">
+        <div id="countDisplay">0</div>
+    </div>
+
+    <div class="grid-container" id="deityGrid">
+        <!-- Grid is populated by Javascript -->
+    </div>
+
+    <div class="button-section">
+        <button class="tap-btn" id="tapButton">TAP</button>
     </div>
 
     <script>
+        // Setup Images
+        const deities = [
+            "brahma.jpeg", "ganesh.jpeg", "vishnu.jpeg", 
+            "durga.jpg", "shiva.jpeg", "satyam.jpeg"
+        ];
+        
+        const grid = document.getElementById('deityGrid');
+        deities.forEach(img => {
+            grid.innerHTML += `<div class="deity-card"><img src="${img}" alt="Deity"></div>`;
+        });
+
+        // Setup Counter & Local Storage
+        let count = localStorage.getItem('sacredJaapCount') || 0;
+        const countDisplay = document.getElementById('countDisplay');
+        const tapButton = document.getElementById('tapButton');
+        
+        countDisplay.innerText = count;
+
+        tapButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            count++;
+            localStorage.setItem('sacredJaapCount', count);
+            countDisplay.innerText = count;
+            
+            // Pop animation on the number
+            countDisplay.style.transform = 'scale(1.15)';
+            setTimeout(() => {
+                countDisplay.style.transform = 'scale(1)';
+            }, 100);
+
+            // Native haptic feedback
+            if(navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+        });
+
+        // Service Worker for Offline capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                });
+            });
+        }
+    </script>
+</body>
+</html>    <script>
         let count = localStorage.getItem('jaapCount') || 0;
         const countDisplay = document.getElementById('count');
         const tapBtn = document.getElementById('tapBtn');
