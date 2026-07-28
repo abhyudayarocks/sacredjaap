@@ -1,15 +1,16 @@
-const CACHE_NAME = 'sacred-jaap-v3';
+const CACHE_NAME = 'sacred-jaap-v5';
 const URLS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/imageedit_2_3478557917.jpg',
-    '/brahma.jpeg',
-    '/ganesh.jpeg',
-    '/vishnu.jpeg',
-    '/durga.jpg',
-    '/shiva.jpeg',
-    '/satyam.jpeg'
+    './',
+    './index.html',
+    './manifest.json',
+    './imageedit_2_3478557917.png',
+    './brahma.jpeg',
+    './ganesh.jpeg',
+    './vishnu.jpeg',
+    './durga.jpeg',
+    './shiva.jpeg',
+    './satyam.jpeg',
+    './master_guru.jpeg'
 ];
 
 self.addEventListener('install', event => {
