@@ -19,7 +19,9 @@
         body, html {
             background-color: var(--bg); color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            height: 100dvh; width: 100vw; overflow: hidden; overscroll-behavior: none; touch-action: none; 
+            height: 100dvh; width: 100vw; 
+            overflow: hidden; /* STRICT NO-SCROLL RULE */
+            overscroll-behavior: none; touch-action: none; 
             display: flex; justify-content: center; user-select: none; -webkit-user-select: none;
             transition: background-color 0.5s ease;
         }
@@ -48,27 +50,24 @@
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* --- THE FLUID NATIVE APP CONTAINER --- */
+        /* THE IPHONE 17 & IPAD FIX: max-height and margin: auto perfectly centers and stops vertical stretching */
         .app-container {
-            width: 100%; height: 100dvh; display: flex; justify-content: center; align-items: center;
+            width: 100%; max-width: 600px; 
+            height: 100%; max-height: 840px; 
+            margin: auto; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: max(15px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
             opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .app-container.loaded { opacity: 1; transform: translateY(0); }
 
-        .app-inner {
-            /* Removed rigid heights so it dynamically fills all space perfectly */
-            width: 100%; max-width: 900px; height: 100%;
-            display: flex; flex-direction: column; justify-content: space-between;
-            padding: max(15px, env(safe-area-inset-top)) clamp(20px, 4vw, 40px) max(20px, env(safe-area-inset-bottom));
-        }
-
         /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: clamp(16px, 2.5dvh, 22px); font-weight: 500; transition: opacity 0.5s ease; flex-shrink: 0; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; transition: opacity 0.5s ease; flex-shrink: 0; }
         .save-log { cursor: pointer; padding: 5px; color: #555555; transition: color 0.2s; }
         .save-log:active { color: var(--accent); }
         .history-btn { cursor: pointer; padding: 5px; color: #FFFFFF; }
         .history-btn:active { opacity: 0.7; }
-        .icon-btn { cursor: pointer; font-size: clamp(20px, 3dvh, 26px); opacity: 0.5; transition: transform 0.2s, opacity 0.2s; padding: 5px;}
+        .icon-btn { cursor: pointer; font-size: 20px; opacity: 0.5; transition: transform 0.2s, opacity 0.2s; padding: 5px;}
         .icon-btn.active { opacity: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
         .icon-btn:active { transform: scale(0.8); }
         .top-controls { display: flex; gap: 15px; }
@@ -76,16 +75,16 @@
         /* Cycles Header & Manual Jump */
         .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.5s ease; cursor: pointer; flex-shrink: 0;}
         .cycles-wrapper:active { opacity: 0.7; }
-        .cycles-header { display: flex; align-items: center; gap: 5px; text-align: center; font-size: clamp(12px, 1.8dvh, 16px); letter-spacing: 2px; color: var(--text-muted); }
+        .cycles-header { display: flex; align-items: center; gap: 5px; text-align: center; font-size: 12px; letter-spacing: 2px; color: var(--text-muted); }
         .edit-icon { font-size: 10px; opacity: 0.6; }
-        .cycles-count { text-align: center; font-size: clamp(70px, 11dvh, 140px); font-weight: 500; margin-top: -5px; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); line-height: 1; }
+        .cycles-count { text-align: center; font-size: min(70px, 8vh); font-weight: 500; margin-top: -5px; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
 
         /* Guru Section */
         .guru-section { text-align: center; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0;}
-        .guru-img-wrapper { position: relative; width: clamp(80px, 13dvh, 160px); height: clamp(80px, 13dvh, 160px); margin: 0 auto clamp(8px, 1.5dvh, 15px); cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .guru-img-wrapper::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: clamp(2px, 0.4dvh, 4px) dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; transition: all 0.15s ease; }
-        .guru-img-wrapper::after { content: ''; position: absolute; top: -14px; left: -14px; right: -14px; bottom: -14px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: clamp(2px, 0.4dvh, 4px) solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; transition: all 0.15s ease; }
-        .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: clamp(2px, 0.4dvh, 4px) solid var(--accent); box-shadow: 0 0 15px rgba(252, 163, 77, 0.3); position: relative; z-index: 2; transition: all 0.15s ease; }
+        .guru-img-wrapper { position: relative; width: min(80px, 10vh); height: min(80px, 10vh); margin: 0 auto 8px; cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .guru-img-wrapper::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; transition: all 0.15s ease; }
+        .guru-img-wrapper::after { content: ''; position: absolute; top: -14px; left: -14px; right: -14px; bottom: -14px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 2px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; transition: all 0.15s ease; }
+        .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(252, 163, 77, 0.3); position: relative; z-index: 2; transition: all 0.15s ease; }
 
         @keyframes spinRight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
@@ -93,23 +92,23 @@
         .guru-img-wrapper.tapped::before { border-color: #FFFFFF; transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
         .guru-img-wrapper.tapped::after { border-top-color: #FFFFFF; box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.8); transform: scale(1.05); }
         .guru-img-wrapper.tapped img { box-shadow: 0 0 25px rgba(252, 163, 77, 0.8); }
-        .guru-text { color: var(--accent); font-size: clamp(15px, 2.2dvh, 22px); font-weight: 600; transition: opacity 0.5s; }
+        .guru-text { color: var(--accent); font-size: min(15px, 2vh); font-weight: 600; transition: opacity 0.5s; }
 
-        /* Grid Section - Elements expand based on screen height natively */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.8dvh, 24px); margin: clamp(10px, 1.5dvh, 25px) 0; transition: opacity 0.5s ease; flex-shrink: 1; align-content: center; }
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: clamp(14px, 2dvh, 24px); padding: clamp(8px, 1.5dvh, 18px) 4px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card img { width: clamp(60px, 9.5dvh, 120px); height: clamp(60px, 9.5dvh, 120px); border-radius: 50%; margin-bottom: clamp(4px, 1dvh, 10px); object-fit: cover; }
-        .card-title { color: var(--accent); font-size: clamp(13px, 1.8dvh, 18px); font-weight: bold; margin-bottom: 2px; }
-        .card-subtitle { color: #D1D1D1; font-size: clamp(10px, 1.4dvh, 14px); margin-bottom: 2px; }
-        .card-text { color: var(--text-muted); font-size: clamp(10px, 1.4dvh, 14px); line-height: 1.2; }
+        /* Grid Section */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(10px, 1.2vh); margin: min(10px, 1vh) 0; transition: opacity 0.5s ease; flex-shrink: 1; align-content: center; }
+        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: min(8px, 1vh) 4px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card img { width: min(60px, 7.5vh); height: min(60px, 7.5vh); border-radius: 50%; margin-bottom: 4px; object-fit: cover; }
+        .card-title { color: var(--accent); font-size: min(13px, 1.5vh); font-weight: bold; margin-bottom: 2px; }
+        .card-subtitle { color: #D1D1D1; font-size: min(10px, 1.2vh); margin-bottom: 2px; }
+        .card-text { color: var(--text-muted); font-size: min(10px, 1.2vh); line-height: 1.2; }
 
         /* Controls */
-        .controls { display: flex; gap: clamp(15px, 2.5dvh, 25px); margin-bottom: clamp(10px, 1.8dvh, 20px); transition: opacity 0.5s ease; flex-shrink: 0; }
-        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: clamp(16px, 2.5dvh, 24px); border-radius: clamp(14px, 2dvh, 20px); font-size: clamp(16px, 2.5dvh, 22px); font-weight: 600; cursor: pointer; color: #FFF; }
+        .controls { display: flex; gap: 15px; margin-bottom: min(10px, 1.5vh); transition: opacity 0.5s ease; flex-shrink: 0; }
+        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: min(16px, 2vh); font-weight: 600; cursor: pointer; color: white;}
         .btn-fix { color: var(--red); }
         .control-btn:active { opacity: 0.7; transform: scale(0.98); }
         
-        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: clamp(22px, 3.5dvh, 32px); border-radius: clamp(18px, 2.5dvh, 24px); color: #FFFFFF; font-size: clamp(22px, 3.5dvh, 34px); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); flex-shrink: 0; transition: opacity 0.5s ease; }
+        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: min(22px, 2.8vh); border-radius: 18px; color: #FFFFFF; font-size: min(22px, 2.8vh); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); flex-shrink: 0; transition: opacity 0.5s ease; }
         .tap-btn:active { transform: scale(0.97); }
 
         /* ZEN MODE STYLING */
@@ -125,10 +124,10 @@
         .golden-particle { position: fixed; top: 50%; left: 50%; width: 6px; height: 6px; background: #FFF; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 12px #FCA34D, 0 0 25px #FCA34D; animation: majesticExplode 3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
         @keyframes majesticExplode { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 60% { opacity: 0.8; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity: 0; } }
 
-        /* --- DETAILED DASHBOARD & MODAL STYLES --- */
+        /* --- DETAILED DASHBOARD MODAL WITH TIMER STYLES --- */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 1000; flex-direction: column; touch-action: auto; }
         .modal.active { display: flex; }
-        .modal-content-scroll { flex: 1; overflow-y: auto; padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; max-width: 900px; margin: 0 auto; width: 100%; }
+        .modal-content-scroll { flex: 1; overflow-y: auto; padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; max-width: 600px; margin: 0 auto; width: 100%;}
         .modal-header { display: flex; justify-content: space-between; padding: 15px 0; font-size: 20px; font-weight: bold; border-bottom: 1px solid #333; margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
         .close-modal { color: var(--accent); cursor: pointer; }
         
@@ -158,11 +157,14 @@
         .stat-box h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500;}
         .stat-box p { font-size: 22px; color: #FFF; font-weight: bold; }
 
-        /* Advanced History Log with Timer UI */
+        /* Timer History List UI */
         .history-list { border-top: 1px solid #333; padding-top: 15px; }
-        .history-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; font-size: 15px;}
-        .history-details { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .duration-tag { font-size: 11px; color: #FCA34D; border: 1px solid rgba(252, 163, 77, 0.3); padding: 2px 8px; border-radius: 8px; background: rgba(252, 163, 77, 0.05); white-space: nowrap; font-weight: 600;}
+        .history-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .history-left { display: flex; flex-direction: column; gap: 4px; }
+        .log-date { font-size: 12px; color: #D1D1D1; }
+        .log-row { display: flex; align-items: center; gap: 10px; }
+        .log-amount { color: #FCA34D; font-weight: bold; font-size: 18px; }
+        .duration-tag { font-size: 11px; color: #FCA34D; background: rgba(252, 163, 77, 0.1); padding: 2px 8px; border-radius: 6px; font-weight: bold; border: 1px solid rgba(252, 163, 77, 0.3); }
         .delete-log-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 5px; opacity: 0.7; transition: transform 0.1s; }
         .delete-log-btn:active { transform: scale(0.8); opacity: 1; }
 
@@ -194,45 +196,42 @@
         <div class="intro-hint">Tap Anywhere to Enter</div>
     </div>
 
-    <!-- MAIN APP -->
+    <!-- MAIN APP CONTAINER -->
     <div class="app-container" id="appContainer">
-        <!-- Re-engineered inner shell expands natively to fill all screen heights/widths -->
-        <div class="app-inner">
-            <div class="top-bar">
-                <span class="save-log" id="saveLogBtn">Save Log</span>
-                <div class="top-controls">
-                    <span class="icon-btn active" id="animBtn">✨</span>
-                    <span class="icon-btn" id="zenBtn">👁️</span>
-                </div>
-                <span class="history-btn" id="openHistoryBtn">Dashboard</span>
+        <div class="top-bar">
+            <span class="save-log" id="saveLogBtn">Save Log</span>
+            <div class="top-controls">
+                <span class="icon-btn active" id="animBtn">✨</span>
+                <span class="icon-btn" id="zenBtn">👁️</span>
             </div>
-            
-            <div class="cycles-wrapper" id="editCountBtn">
-                <div class="cycles-header">TOTAL CYCLES <span class="edit-icon">✏️</span></div>
-                <div class="cycles-count" id="countDisplay">0</div>
-            </div>
-
-            <div class="guru-section">
-                <div class="guru-img-wrapper" id="guruTapButton"><img src="master_guru.jpeg" alt="Guru"></div>
-                <div class="guru-text">गोविंद गुरु सत् सुकृत अविगत कबीर</div>
-            </div>
-
-            <div class="grid">
-                <div class="card"><img src="brahma.jpeg" alt="Brahma"><div class="card-title">स्वाद कमल</div><div class="card-subtitle">(ब्रह्मा-सावित्री जी)</div><div class="card-text">Mantra: ओम्<br>Petals: 6</div></div>
-                <div class="card"><img src="ganesh.jpeg" alt="Ganesh"><div class="card-title">मूल कमल</div><div class="card-subtitle">(गणेश जी)</div><div class="card-text">Mantra: किलियम्<br>Petals: 4</div></div>
-                <div class="card"><img src="vishnu.jpeg" alt="Vishnu"><div class="card-title">नाभि कमल</div><div class="card-subtitle">(विष्णु-लक्ष्मी जी)</div><div class="card-text">Mantra: हरियम्<br>Petals: 8</div></div>
-                <div class="card"><img src="durga.jpeg" alt="Durga"><div class="card-title">कण्ठ कमल</div><div class="card-subtitle">(शेराँवाली जी)</div><div class="card-text">Mantra: श्रीयम्<br>Petals: 16</div></div>
-                <div class="card"><img src="shiva.jpeg" alt="Shiva"><div class="card-title">हृदय कमल</div><div class="card-subtitle">(शिव-पार्वती जी)</div><div class="card-text">Mantra: सोहम्<br>Petals: 12</div></div>
-                <div class="card"><img src="satyam.jpeg" alt="Satyam"><div class="card-title">सत्य पुरुष</div><div class="card-subtitle" style="visibility: hidden;">-</div><div class="card-text">Mantra: सत्यम्<br><span style="visibility: hidden;">-</span></div></div>
-            </div>
-
-            <div class="controls">
-                <button class="control-btn btn-reset" id="resetBtn">Reset</button>
-                <button class="control-btn btn-fix" id="fixBtn">Fix (-1)</button>
-            </div>
-            
-            <button class="tap-btn" id="tapButton">TAP TO COUNT</button>
+            <span class="history-btn" id="openHistoryBtn">Dashboard</span>
         </div>
+        
+        <div class="cycles-wrapper" id="editCountBtn">
+            <div class="cycles-header">TOTAL CYCLES <span class="edit-icon">✏️</span></div>
+            <div class="cycles-count" id="countDisplay">0</div>
+        </div>
+
+        <div class="guru-section">
+            <div class="guru-img-wrapper" id="guruTapButton"><img src="master_guru.jpeg" alt="Guru"></div>
+            <div class="guru-text">गोविंद गुरु सत् सुकृत अविगत कबीर</div>
+        </div>
+
+        <div class="grid">
+            <div class="card"><img src="brahma.jpeg" alt="Brahma"><div class="card-title">स्वाद कमल</div><div class="card-subtitle">(ब्रह्मा-सावित्री जी)</div><div class="card-text">Mantra: ओम्<br>Petals: 6</div></div>
+            <div class="card"><img src="ganesh.jpeg" alt="Ganesh"><div class="card-title">मूल कमल</div><div class="card-subtitle">(गणेश जी)</div><div class="card-text">Mantra: किलियम्<br>Petals: 4</div></div>
+            <div class="card"><img src="vishnu.jpeg" alt="Vishnu"><div class="card-title">नाभि कमल</div><div class="card-subtitle">(विष्णु-लक्ष्मी जी)</div><div class="card-text">Mantra: हरियम्<br>Petals: 8</div></div>
+            <div class="card"><img src="durga.jpeg" alt="Durga"><div class="card-title">कण्ठ कमल</div><div class="card-subtitle">(शेराँवाली जी)</div><div class="card-text">Mantra: श्रीयम्<br>Petals: 16</div></div>
+            <div class="card"><img src="shiva.jpeg" alt="Shiva"><div class="card-title">हृदय कमल</div><div class="card-subtitle">(शिव-पार्वती जी)</div><div class="card-text">Mantra: सोहम्<br>Petals: 12</div></div>
+            <div class="card"><img src="satyam.jpeg" alt="Satyam"><div class="card-title">सत्य पुरुष</div><div class="card-subtitle" style="visibility: hidden;">-</div><div class="card-text">Mantra: सत्यम्<br><span style="visibility: hidden;">-</span></div></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn btn-reset" id="resetBtn">Reset</button>
+            <button class="control-btn btn-fix" id="fixBtn">Fix (-1)</button>
+        </div>
+        
+        <button class="tap-btn" id="tapButton">TAP TO COUNT</button>
     </div>
 
     <!-- DETAILED DASHBOARD MODAL -->
@@ -297,12 +296,11 @@
             setTimeout(() => { introScreen.style.display = 'none'; }, 600);
         });
 
-        // Core App Variables
         let count = parseInt(localStorage.getItem('sacredJaapCount')) || 0;
         let historyLogs = JSON.parse(localStorage.getItem('sacredJaapHistory')) || [];
         let dailyData = JSON.parse(localStorage.getItem('sacredJaapDaily')) || { date: new Date().toLocaleDateString(), total: 0 };
         
-        // Advanced Session Timer System
+        // Timer Logic Retained
         let sessionStartTime = localStorage.getItem('sacredJaapStartTime') || null;
 
         let zenMode = false;
@@ -406,7 +404,7 @@
             const today = new Date().toLocaleDateString();
             if(dailyData.date !== today) { 
                 dailyData = { date: today, total: 0 }; 
-                resetTimer(); // Also reset timer if it's a new day
+                resetTimer(); // Reset timer if new day
             }
         }
 
@@ -447,7 +445,7 @@
             if(e && e.type === 'click') e.preventDefault();
             checkDailyReset();
             
-            // Start precision timer on first tap
+            // Start timer on tap
             if (!sessionStartTime || count === 0) {
                 sessionStartTime = Date.now();
                 localStorage.setItem('sacredJaapStartTime', sessionStartTime);
@@ -472,7 +470,7 @@
                     
                     historyLogs.unshift({ date: dateString, amount: "1 Full Mala (108)", duration: durStr });
                     localStorage.setItem('sacredJaapHistory', JSON.stringify(historyLogs));
-                    resetTimer(); // Reset timer so the next mala starts fresh
+                    resetTimer();
                     
                     showToast("1 Full Mala Completed & Saved!");
                 } else if (count % 27 === 0) {
@@ -495,11 +493,7 @@
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
-            showConfirm("Reset the current cycle to 0?", () => { 
-                count = 0; 
-                resetTimer();
-                updateDisplay(); 
-            });
+            showConfirm("Reset the current cycle to 0?", () => { count = 0; resetTimer(); updateDisplay(); });
         });
 
         document.getElementById('saveLogBtn').addEventListener('click', () => {
@@ -513,9 +507,7 @@
             localStorage.setItem('sacredJaapHistory', JSON.stringify(historyLogs));
             showToast(`Successfully saved ${count} cycles!`);
             
-            count = 0; 
-            resetTimer(); // Clear timer after manual save
-            updateDisplay();
+            count = 0; resetTimer(); updateDisplay();
         });
 
         function generateDashboardStats() {
@@ -577,12 +569,12 @@
                     let durBadge = log.duration ? `<span class="duration-tag">⏱ ${log.duration}</span>` : '';
                     historyList.innerHTML += `
                         <div class="history-item">
-                            <div class="history-details">
-                                <div>
-                                    <span style="font-size:12px; color:#D1D1D1; display:block; margin-bottom:4px;">${log.date}</span>
-                                    <span style="color:#FCA34D; font-weight:bold; font-size:16px;">${log.amount}</span>
+                            <div class="history-left">
+                                <div class="log-date">${log.date}</div>
+                                <div class="log-row">
+                                    <span class="log-amount">${log.amount}</span>
+                                    ${durBadge}
                                 </div>
-                                ${durBadge}
                             </div>
                             <button class="delete-log-btn" onclick="deleteIndividualLog(${index})">🗑️</button>
                         </div>`;
