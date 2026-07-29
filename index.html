@@ -20,15 +20,16 @@
             background-color: var(--bg); color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             height: 100dvh; width: 100vw; 
-            overflow: hidden; /* STRICT NO-SCROLL RULE */
+            overflow: hidden; /* STRICT NO SCROLLING */
             overscroll-behavior: none; touch-action: none; 
-            display: flex; justify-content: center; user-select: none; -webkit-user-select: none;
+            display: flex; justify-content: center; align-items: center; /* Keeps iPad centered perfectly */
+            user-select: none; -webkit-user-select: none;
             transition: background-color 0.5s ease;
         }
 
         body.zen-mode { background-color: #000000; }
 
-        /* --- FIXED INTRO SCREEN --- */
+        /* --- INTRO SCREEN --- */
         .intro-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             background: var(--bg); z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -36,54 +37,56 @@
         }
         .intro-screen.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
         
-        .intro-guru-wrapper { position: relative; width: min(160px, 45vw); height: min(160px, 45vw); animation: float 4s ease-in-out infinite; }
-        
+        .intro-guru-wrapper { position: relative; width: 180px; height: 180px; animation: float 4s ease-in-out infinite; }
         .intro-rings { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .intro-rings::before { content: ''; position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border-radius: 50%; border: 3px dashed rgba(252, 163, 77, 0.6); animation: spinRight 20s linear infinite; }
         .intro-rings::after { content: ''; position: absolute; top: -25px; left: -25px; right: -25px; bottom: -25px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 3px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 20px rgba(252, 163, 77, 0.5); animation: spinLeft 12s linear infinite; }
-        
         .intro-guru-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 0 40px rgba(252, 163, 77, 0.4); position: relative; z-index: 2; }
-        
-        .intro-text { color: var(--accent); font-size: min(22px, 5vw); font-weight: bold; margin-top: 50px; text-align: center; }
+        .intro-text { color: var(--accent); font-size: 24px; font-weight: bold; margin-top: 50px; text-align: center; }
         .intro-hint { color: #888; font-size: 14px; margin-top: 25px; animation: pulse 2s infinite; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;}
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* THE IPHONE 17 & IPAD FIX: max-height and margin: auto perfectly centers and stops vertical stretching */
+        /* --- THE NEW, BULLETPROOF ARCHITECTURE --- */
         .app-container {
-            width: 100%; max-width: 600px; 
-            height: 100%; max-height: 840px; 
-            margin: auto; 
+            width: 100%; max-width: 450px; /* Locks the iPad to a clean, perfect phone size */
+            height: 100%; 
             display: flex; flex-direction: column; justify-content: space-between;
             padding: max(15px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
             opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .app-container.loaded { opacity: 1; transform: translateY(0); }
 
-        /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; transition: opacity 0.5s ease; flex-shrink: 0; }
+        /* TOP SECTION */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; flex-shrink: 0; padding-bottom: 10px;}
         .save-log { cursor: pointer; padding: 5px; color: #555555; transition: color 0.2s; }
         .save-log:active { color: var(--accent); }
         .history-btn { cursor: pointer; padding: 5px; color: #FFFFFF; }
         .history-btn:active { opacity: 0.7; }
-        .icon-btn { cursor: pointer; font-size: 20px; opacity: 0.5; transition: transform 0.2s, opacity 0.2s; padding: 5px;}
+        .icon-btn { cursor: pointer; font-size: 20px; opacity: 0.5; transition: transform 0.2s; padding: 5px;}
         .icon-btn.active { opacity: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-        .icon-btn:active { transform: scale(0.8); }
         .top-controls { display: flex; gap: 15px; }
 
-        /* Cycles Header & Manual Jump */
-        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.5s ease; cursor: pointer; flex-shrink: 0;}
+        /* MIDDLE GROUP: This fixes the iPhone 17. It groups everything and centers it. */
+        .middle-group {
+            flex: 1; /* Takes up all remaining screen space */
+            display: flex; flex-direction: column; justify-content: center; /* Centers the content perfectly */
+            gap: max(10px, 2vh); /* Breathes slightly on tall screens, but never breaks apart */
+        }
+
+        /* Cycles Header */
+        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .cycles-wrapper:active { opacity: 0.7; }
-        .cycles-header { display: flex; align-items: center; gap: 5px; text-align: center; font-size: 12px; letter-spacing: 2px; color: var(--text-muted); }
+        .cycles-header { display: flex; align-items: center; gap: 5px; font-size: 12px; letter-spacing: 2px; color: var(--text-muted); }
         .edit-icon { font-size: 10px; opacity: 0.6; }
-        .cycles-count { text-align: center; font-size: min(70px, 8vh); font-weight: 500; margin-top: -5px; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cycles-count { font-size: min(85px, 10vh); font-weight: 500; margin-top: -5px; line-height: 1; }
 
         /* Guru Section */
-        .guru-section { text-align: center; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0;}
-        .guru-img-wrapper { position: relative; width: min(80px, 10vh); height: min(80px, 10vh); margin: 0 auto 8px; cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .guru-img-wrapper::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; transition: all 0.15s ease; }
-        .guru-img-wrapper::after { content: ''; position: absolute; top: -14px; left: -14px; right: -14px; bottom: -14px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 2px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; transition: all 0.15s ease; }
+        .guru-section { text-align: center; }
+        .guru-img-wrapper { position: relative; width: min(90px, 11vh); height: min(90px, 11vh); margin: 0 auto 10px; cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .guru-img-wrapper::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; }
+        .guru-img-wrapper::after { content: ''; position: absolute; top: -14px; left: -14px; right: -14px; bottom: -14px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 2px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; }
         .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(252, 163, 77, 0.3); position: relative; z-index: 2; transition: all 0.15s ease; }
 
         @keyframes spinRight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -92,39 +95,39 @@
         .guru-img-wrapper.tapped::before { border-color: #FFFFFF; transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
         .guru-img-wrapper.tapped::after { border-top-color: #FFFFFF; box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.8); transform: scale(1.05); }
         .guru-img-wrapper.tapped img { box-shadow: 0 0 25px rgba(252, 163, 77, 0.8); }
-        .guru-text { color: var(--accent); font-size: min(15px, 2vh); font-weight: 600; transition: opacity 0.5s; }
+        .guru-text { color: var(--accent); font-size: min(16px, 2vh); font-weight: 600; }
 
         /* Grid Section */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(10px, 1.2vh); margin: min(10px, 1vh) 0; transition: opacity 0.5s ease; flex-shrink: 1; align-content: center; }
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: min(8px, 1vh) 4px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card img { width: min(60px, 7.5vh); height: min(60px, 7.5vh); border-radius: 50%; margin-bottom: 4px; object-fit: cover; }
-        .card-title { color: var(--accent); font-size: min(13px, 1.5vh); font-weight: bold; margin-bottom: 2px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(10px, 1.5vh); width: 100%; }
+        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: min(10px, 1.5vh) 4px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card img { width: min(65px, 8.5vh); height: min(65px, 8.5vh); border-radius: 50%; margin-bottom: 6px; object-fit: cover; }
+        .card-title { color: var(--accent); font-size: min(13px, 1.6vh); font-weight: bold; margin-bottom: 2px; }
         .card-subtitle { color: #D1D1D1; font-size: min(10px, 1.2vh); margin-bottom: 2px; }
         .card-text { color: var(--text-muted); font-size: min(10px, 1.2vh); line-height: 1.2; }
 
-        /* Controls */
-        .controls { display: flex; gap: 15px; margin-bottom: min(10px, 1.5vh); transition: opacity 0.5s ease; flex-shrink: 0; }
-        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: min(16px, 2vh); font-weight: 600; cursor: pointer; color: white;}
+        /* BOTTOM SECTION */
+        .bottom-group { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; padding-top: 10px;}
+        .controls { display: flex; gap: 15px; }
+        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; color: #FFFFFF; }
         .btn-fix { color: var(--red); }
         .control-btn:active { opacity: 0.7; transform: scale(0.98); }
         
-        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: min(22px, 2.8vh); border-radius: 18px; color: #FFFFFF; font-size: min(22px, 2.8vh); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); flex-shrink: 0; transition: opacity 0.5s ease; }
+        .tap-btn { width: 100%; height: min(80px, 9vh); background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; border-radius: 18px; color: #FFFFFF; font-size: min(24px, 3vh); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); }
         .tap-btn:active { transform: scale(0.97); }
 
         /* ZEN MODE STYLING */
-        body.zen-mode .grid, body.zen-mode .controls, body.zen-mode .tap-btn, body.zen-mode .guru-text { opacity: 0; pointer-events: none; visibility: hidden; }
-        body.zen-mode .save-log, body.zen-mode .history-btn { opacity: 0; pointer-events: none; }
-        body.zen-mode .guru-section { transform: scale(1.4) translateY(8vh); }
-        body.zen-mode .cycles-wrapper { transform: translateY(4vh); }
+        body.zen-mode .grid, body.zen-mode .bottom-group, body.zen-mode .guru-text { opacity: 0; pointer-events: none; visibility: hidden; }
+        body.zen-mode .save-log, body.zen-mode .history-btn, body.zen-mode .edit-icon { opacity: 0; pointer-events: none; visibility: hidden; }
+        body.zen-mode .guru-section { transform: scale(1.4) translateY(4vh); transition: 0.5s ease; }
+        body.zen-mode .cycles-wrapper { transform: translateY(2vh); transition: 0.5s ease; }
 
-        /* Floating +1 & Majestic Particles */
+        /* Floating Particles */
         .floating-number { position: fixed; color: #FFFFFF; font-size: 28px; font-weight: 900; text-shadow: 0 0 15px var(--accent), 0 0 5px var(--accent); pointer-events: none; z-index: 9999; animation: floatUpFade 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         @keyframes floatUpFade { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-70px) scale(1.4); } }
-        
         .golden-particle { position: fixed; top: 50%; left: 50%; width: 6px; height: 6px; background: #FFF; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 12px #FCA34D, 0 0 25px #FCA34D; animation: majesticExplode 3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
         @keyframes majesticExplode { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 60% { opacity: 0.8; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity: 0; } }
 
-        /* --- DETAILED DASHBOARD MODAL WITH TIMER STYLES --- */
+        /* --- DASHBOARD MODAL --- */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 1000; flex-direction: column; touch-action: auto; }
         .modal.active { display: flex; }
         .modal-content-scroll { flex: 1; overflow-y: auto; padding: env(safe-area-inset-top) 20px calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; max-width: 600px; margin: 0 auto; width: 100%;}
@@ -134,38 +137,37 @@
         .dash-card { background: var(--card-bg); border: 1px solid #333; border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .dash-header { color: var(--accent); font-size: 16px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Ring Section */
         .dashboard-ring-sec { display: flex; align-items: center; justify-content: space-between; }
         .dash-text h3 { color: #FFF; font-size: 18px; margin-bottom: 5px; }
         .dash-text p { color: var(--text-muted); font-size: 14px; }
         .progress-ring { position: relative; width: 80px; height: 80px; }
-        .progress-ring svg { transform: rotate(-90deg); }
+        .progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%;}
         .ring-bg { stroke: #333; stroke-width: 6; fill: transparent; }
-        .ring-fill { stroke: var(--accent); stroke-width: 6; fill: transparent; stroke-dasharray: 201; stroke-dashoffset: 201; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); stroke-linecap: round; }
+        .ring-fill { stroke: var(--accent); stroke-width: 6; fill: transparent; stroke-dasharray: 251.2; stroke-dashoffset: 251.2; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); stroke-linecap: round; }
         .ring-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; }
 
-        /* Chart Section */
         .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 130px; padding-top: 15px; }
         .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; gap: 8px;}
         .chart-bar { width: min(24px, 5vw); background: linear-gradient(180deg, #FCA34D 0%, #FF453A 100%); border-radius: 6px 6px 0 0; position: relative; transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chart-value { font-size: 10px; color: #FFF; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-weight: bold; }
         .chart-label { font-size: 11px; color: var(--text-muted); }
 
-        /* Stats Grid */
         .stats-row { display: flex; gap: 15px; margin-bottom: 25px; }
         .stat-box { flex: 1; background: var(--btn-gray); border-radius: 12px; padding: 15px; text-align: center; border: 1px solid #333; }
         .stat-box h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500;}
         .stat-box p { font-size: 22px; color: #FFF; font-weight: bold; }
 
-        /* Timer History List UI */
+        /* THE REBUILT HISTORY ITEM (Guarantees Timer is visible on iPhone) */
         .history-list { border-top: 1px solid #333; padding-top: 15px; }
         .history-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
-        .history-left { display: flex; flex-direction: column; gap: 4px; }
-        .log-date { font-size: 12px; color: #D1D1D1; }
-        .log-row { display: flex; align-items: center; gap: 10px; }
-        .log-amount { color: #FCA34D; font-weight: bold; font-size: 18px; }
-        .duration-tag { font-size: 11px; color: #FCA34D; background: rgba(252, 163, 77, 0.1); padding: 2px 8px; border-radius: 6px; font-weight: bold; border: 1px solid rgba(252, 163, 77, 0.3); }
-        .delete-log-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 5px; opacity: 0.7; transition: transform 0.1s; }
+        
+        .history-info { display: flex; flex-direction: column; gap: 6px; }
+        .history-date { font-size: 12px; color: #D1D1D1; }
+        .history-data-row { display: flex; align-items: center; gap: 10px; }
+        .history-amount { font-size: 18px; font-weight: bold; color: #FCA34D; }
+        .duration-tag { font-size: 11px; color: #FCA34D; border: 1px solid rgba(252, 163, 77, 0.3); padding: 2px 8px; border-radius: 6px; background: rgba(252, 163, 77, 0.05); white-space: nowrap; font-weight: bold;}
+        
+        .delete-log-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; opacity: 0.7; transition: transform 0.1s; }
         .delete-log-btn:active { transform: scale(0.8); opacity: 1; }
 
         .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #2C2C2E; color: white; padding: 16px 28px; border-radius: 30px; font-size: 16px; font-weight: bold; transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 4000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid #444; width: max-content; }
@@ -198,6 +200,7 @@
 
     <!-- MAIN APP CONTAINER -->
     <div class="app-container" id="appContainer">
+        
         <div class="top-bar">
             <span class="save-log" id="saveLogBtn">Save Log</span>
             <div class="top-controls">
@@ -207,31 +210,36 @@
             <span class="history-btn" id="openHistoryBtn">Dashboard</span>
         </div>
         
-        <div class="cycles-wrapper" id="editCountBtn">
-            <div class="cycles-header">TOTAL CYCLES <span class="edit-icon">✏️</span></div>
-            <div class="cycles-count" id="countDisplay">0</div>
+        <!-- THE MIDDLE GROUP (Fixes iPhone 17 Gaps, Centers Cohesively) -->
+        <div class="middle-group">
+            <div class="cycles-wrapper" id="editCountBtn">
+                <div class="cycles-header">TOTAL CYCLES <span class="edit-icon">✏️</span></div>
+                <div class="cycles-count" id="countDisplay">0</div>
+            </div>
+
+            <div class="guru-section">
+                <div class="guru-img-wrapper" id="guruTapButton"><img src="master_guru.jpeg" alt="Guru"></div>
+                <div class="guru-text">गोविंद गुरु सत् सुकृत अविगत कबीर</div>
+            </div>
+
+            <div class="grid">
+                <div class="card"><img src="brahma.jpeg" alt="Brahma"><div class="card-title">स्वाद कमल</div><div class="card-subtitle">(ब्रह्मा-सावित्री जी)</div><div class="card-text">Mantra: ओम्<br>Petals: 6</div></div>
+                <div class="card"><img src="ganesh.jpeg" alt="Ganesh"><div class="card-title">मूल कमल</div><div class="card-subtitle">(गणेश जी)</div><div class="card-text">Mantra: किलियम्<br>Petals: 4</div></div>
+                <div class="card"><img src="vishnu.jpeg" alt="Vishnu"><div class="card-title">नाभि कमल</div><div class="card-subtitle">(विष्णु-लक्ष्मी जी)</div><div class="card-text">Mantra: हरियम्<br>Petals: 8</div></div>
+                <div class="card"><img src="durga.jpeg" alt="Durga"><div class="card-title">कण्ठ कमल</div><div class="card-subtitle">(शेराँवाली जी)</div><div class="card-text">Mantra: श्रीयम्<br>Petals: 16</div></div>
+                <div class="card"><img src="shiva.jpeg" alt="Shiva"><div class="card-title">हृदय कमल</div><div class="card-subtitle">(शिव-पार्वती जी)</div><div class="card-text">Mantra: सोहम्<br>Petals: 12</div></div>
+                <div class="card"><img src="satyam.jpeg" alt="Satyam"><div class="card-title">सत्य पुरुष</div><div class="card-subtitle" style="visibility: hidden;">-</div><div class="card-text">Mantra: सत्यम्<br><span style="visibility: hidden;">-</span></div></div>
+            </div>
         </div>
 
-        <div class="guru-section">
-            <div class="guru-img-wrapper" id="guruTapButton"><img src="master_guru.jpeg" alt="Guru"></div>
-            <div class="guru-text">गोविंद गुरु सत् सुकृत अविगत कबीर</div>
+        <div class="bottom-group">
+            <div class="controls">
+                <button class="control-btn btn-reset" id="resetBtn">Reset</button>
+                <button class="control-btn btn-fix" id="fixBtn">Fix (-1)</button>
+            </div>
+            <button class="tap-btn" id="tapButton">TAP TO COUNT</button>
         </div>
 
-        <div class="grid">
-            <div class="card"><img src="brahma.jpeg" alt="Brahma"><div class="card-title">स्वाद कमल</div><div class="card-subtitle">(ब्रह्मा-सावित्री जी)</div><div class="card-text">Mantra: ओम्<br>Petals: 6</div></div>
-            <div class="card"><img src="ganesh.jpeg" alt="Ganesh"><div class="card-title">मूल कमल</div><div class="card-subtitle">(गणेश जी)</div><div class="card-text">Mantra: किलियम्<br>Petals: 4</div></div>
-            <div class="card"><img src="vishnu.jpeg" alt="Vishnu"><div class="card-title">नाभि कमल</div><div class="card-subtitle">(विष्णु-लक्ष्मी जी)</div><div class="card-text">Mantra: हरियम्<br>Petals: 8</div></div>
-            <div class="card"><img src="durga.jpeg" alt="Durga"><div class="card-title">कण्ठ कमल</div><div class="card-subtitle">(शेराँवाली जी)</div><div class="card-text">Mantra: श्रीयम्<br>Petals: 16</div></div>
-            <div class="card"><img src="shiva.jpeg" alt="Shiva"><div class="card-title">हृदय कमल</div><div class="card-subtitle">(शिव-पार्वती जी)</div><div class="card-text">Mantra: सोहम्<br>Petals: 12</div></div>
-            <div class="card"><img src="satyam.jpeg" alt="Satyam"><div class="card-title">सत्य पुरुष</div><div class="card-subtitle" style="visibility: hidden;">-</div><div class="card-text">Mantra: सत्यम्<br><span style="visibility: hidden;">-</span></div></div>
-        </div>
-
-        <div class="controls">
-            <button class="control-btn btn-reset" id="resetBtn">Reset</button>
-            <button class="control-btn btn-fix" id="fixBtn">Fix (-1)</button>
-        </div>
-        
-        <button class="tap-btn" id="tapButton">TAP TO COUNT</button>
     </div>
 
     <!-- DETAILED DASHBOARD MODAL -->
@@ -265,7 +273,7 @@
             <div class="dash-header">Recent Logs</div>
             <div class="history-list" id="historyList"></div>
             
-            <button class="clear-history" id="clearHistoryBtn" style="margin-top:15px; width: 100%;">Clear All History</button>
+            <button class="control-btn" id="clearHistoryBtn" style="margin-top:15px; width: 100%; background:var(--red); color: white;">Clear All History</button>
         </div>
     </div>
 
@@ -300,9 +308,7 @@
         let historyLogs = JSON.parse(localStorage.getItem('sacredJaapHistory')) || [];
         let dailyData = JSON.parse(localStorage.getItem('sacredJaapDaily')) || { date: new Date().toLocaleDateString(), total: 0 };
         
-        // Timer Logic Retained
         let sessionStartTime = localStorage.getItem('sacredJaapStartTime') || null;
-
         let zenMode = false;
         let animationsEnabled = localStorage.getItem('sacredJaapAnim') !== 'false';
         
@@ -311,7 +317,7 @@
         const animBtn = document.getElementById('animBtn');
         const zenBtn = document.getElementById('zenBtn');
 
-        // Timer Functions
+        // Precision Timer Setup
         function getDurationFormatted() {
             if (!sessionStartTime) return null;
             let diffSecs = Math.floor((Date.now() - parseInt(sessionStartTime)) / 1000);
@@ -404,7 +410,7 @@
             const today = new Date().toLocaleDateString();
             if(dailyData.date !== today) { 
                 dailyData = { date: today, total: 0 }; 
-                resetTimer(); // Reset timer if new day
+                resetTimer(); 
             }
         }
 
@@ -445,7 +451,6 @@
             if(e && e.type === 'click') e.preventDefault();
             checkDailyReset();
             
-            // Start timer on tap
             if (!sessionStartTime || count === 0) {
                 sessionStartTime = Date.now();
                 localStorage.setItem('sacredJaapStartTime', sessionStartTime);
@@ -569,10 +574,10 @@
                     let durBadge = log.duration ? `<span class="duration-tag">⏱ ${log.duration}</span>` : '';
                     historyList.innerHTML += `
                         <div class="history-item">
-                            <div class="history-left">
-                                <div class="log-date">${log.date}</div>
-                                <div class="log-row">
-                                    <span class="log-amount">${log.amount}</span>
+                            <div class="history-info">
+                                <span class="history-date">${log.date}</span>
+                                <div class="history-data-row">
+                                    <span class="history-amount">${log.amount}</span>
                                     ${durBadge}
                                 </div>
                             </div>
@@ -595,7 +600,7 @@
             const ring = document.getElementById('ringFill');
             const ringText = document.getElementById('ringText');
             const percent = Math.min((dailyData.total / 108) * 100, 100);
-            ring.style.strokeDashoffset = 201 - (201 * percent) / 100;
+            ring.style.strokeDashoffset = 251.2 - (251.2 * percent) / 100;
             ringText.innerText = Math.floor(percent) + '%';
             generateDashboardStats();
             renderHistory();
@@ -609,7 +614,7 @@
                 historyLogs = []; dailyData.total = 0; resetTimer();
                 localStorage.setItem('sacredJaapHistory', JSON.stringify(historyLogs));
                 updateDisplay(); 
-                document.getElementById('ringFill').style.strokeDashoffset = 201;
+                document.getElementById('ringFill').style.strokeDashoffset = 251.2;
                 document.getElementById('ringText').innerText = '0%';
                 generateDashboardStats(); renderHistory();
                 showToast("History cleared.");
