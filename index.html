@@ -26,61 +26,61 @@
 
         body.zen-mode { background-color: #000000; }
 
-        /* --- FIXED INTRO SCREEN --- */
+        /* --- INTRO SCREEN --- */
         .intro-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: var(--bg); z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: var(--bg); z-index: 3000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.6s ease, transform 0.6s ease; cursor: pointer;
         }
         .intro-screen.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
         
-        /* Decoupled the animation wrapper from the rings to prevent iOS rendering glitch */
-        .intro-guru-wrapper { position: relative; width: min(160px, 45vw); height: min(160px, 45vw); animation: float 4s ease-in-out infinite; }
-        
+        .intro-guru-wrapper { position: relative; width: min(220px, 40dvh); height: min(220px, 40dvh); animation: float 4s ease-in-out infinite; }
         .intro-rings { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .intro-rings::before { content: ''; position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border-radius: 50%; border: 3px dashed rgba(252, 163, 77, 0.6); animation: spinRight 20s linear infinite; }
-        .intro-rings::after { content: ''; position: absolute; top: -25px; left: -25px; right: -25px; bottom: -25px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 3px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 20px rgba(252, 163, 77, 0.5); animation: spinLeft 12s linear infinite; }
+        .intro-rings::before { content: ''; position: absolute; top: -10%; left: -10%; right: -10%; bottom: -10%; border-radius: 50%; border: min(3px, 0.5dvh) dashed rgba(252, 163, 77, 0.6); animation: spinRight 20s linear infinite; }
+        .intro-rings::after { content: ''; position: absolute; top: -18%; left: -18%; right: -18%; bottom: -18%; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: min(3px, 0.5dvh) solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 20px rgba(252, 163, 77, 0.5); animation: spinLeft 12s linear infinite; }
+        .intro-guru-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: min(3px, 0.5dvh) solid var(--accent); box-shadow: 0 0 40px rgba(252, 163, 77, 0.4); position: relative; z-index: 2; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
         
-        .intro-guru-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 0 40px rgba(252, 163, 77, 0.4); position: relative; z-index: 2; }
-        
-        .intro-text { color: var(--accent); font-size: min(22px, 5vw); font-weight: bold; margin-top: 50px; text-align: center; }
-        .intro-hint { color: #888; font-size: 14px; margin-top: 25px; animation: pulse 2s infinite; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;}
+        .intro-text { color: var(--accent); font-size: min(28px, 4dvh); font-weight: bold; margin-top: min(60px, 8dvh); text-align: center; }
+        .intro-hint { color: #888; font-size: min(16px, 2.5dvh); margin-top: min(30px, 4dvh); animation: pulse 2s infinite; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;}
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* Main App Container - Changed to Justify Content Between */
+        /* --- THE WITTY, FLUID APP CONTAINER --- */
         .app-container {
-            width: 100%; max-width: 600px; height: 100%; display: flex; flex-direction: column; justify-content: space-between;
-            padding: max(15px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+            width: 100%; max-width: 600px; height: 100dvh; 
+            display: flex; flex-direction: column; 
+            /* Space-between ensures the Tap button is always bolted to the bottom */
+            justify-content: space-between; 
+            padding: max(10px, env(safe-area-inset-top)) min(20px, 4vw) max(15px, env(safe-area-inset-bottom));
             opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .app-container.loaded { opacity: 1; transform: translateY(0); }
 
-        /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; transition: opacity 0.5s ease; flex-shrink: 0; }
+        /* Top Bar: Strictly 5% of height */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: min(18px, 2.5dvh); font-weight: 500; transition: opacity 0.5s ease; flex-shrink: 0; margin-bottom: min(10px, 1.5dvh);}
         .save-log { cursor: pointer; padding: 5px; color: #555555; transition: color 0.2s; }
         .save-log:active { color: var(--accent); }
         .history-btn { cursor: pointer; padding: 5px; color: #FFFFFF; }
         .history-btn:active { opacity: 0.7; }
-        .icon-btn { cursor: pointer; font-size: 20px; opacity: 0.5; transition: transform 0.2s, opacity 0.2s; padding: 5px;}
+        .icon-btn { cursor: pointer; font-size: min(24px, 3dvh); opacity: 0.5; transition: transform 0.2s, opacity 0.2s; padding: 5px;}
         .icon-btn.active { opacity: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
         .icon-btn:active { transform: scale(0.8); }
         .top-controls { display: flex; gap: 15px; }
 
-        /* Cycles Header & Manual Jump */
-        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.5s ease; cursor: pointer; flex-shrink: 0;}
+        /* Cycles: Strictly 12% of height */
+        .cycles-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.5s ease; cursor: pointer; flex-shrink: 0; margin-bottom: min(10px, 1.5dvh);}
         .cycles-wrapper:active { opacity: 0.7; }
-        .cycles-header { display: flex; align-items: center; gap: 5px; text-align: center; font-size: 12px; letter-spacing: 2px; color: var(--text-muted); }
-        .edit-icon { font-size: 10px; opacity: 0.6; }
-        .cycles-count { text-align: center; font-size: min(70px, 8vh); font-weight: 500; margin-top: -5px; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cycles-header { display: flex; align-items: center; gap: 5px; text-align: center; font-size: min(12px, 1.8dvh); letter-spacing: 2px; color: var(--text-muted); }
+        .edit-icon { font-size: min(10px, 1.5dvh); opacity: 0.6; }
+        .cycles-count { text-align: center; font-size: min(90px, 11dvh); font-weight: 500; margin-top: -1%; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); line-height: 1; }
 
-        /* Guru Section */
+        /* Guru Section: Strictly 18% of height */
         .guru-section { text-align: center; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0;}
-        .guru-img-wrapper { position: relative; width: min(80px, 10vh); height: min(80px, 10vh); margin: 0 auto 8px; cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .guru-img-wrapper::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; transition: all 0.15s ease; }
-        .guru-img-wrapper::after { content: ''; position: absolute; top: -14px; left: -14px; right: -14px; bottom: -14px; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: 2px solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; transition: all 0.15s ease; }
-        .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(252, 163, 77, 0.3); position: relative; z-index: 2; transition: all 0.15s ease; }
+        .guru-img-wrapper { position: relative; width: min(120px, 15dvh); height: min(120px, 15dvh); margin: 0 auto min(8px, 1dvh); cursor: pointer; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .guru-img-wrapper::before { content: ''; position: absolute; top: -10%; left: -10%; right: -10%; bottom: -10%; border-radius: 50%; border: min(2px, 0.4dvh) dashed rgba(252, 163, 77, 0.6); animation: spinRight 15s linear infinite; transition: all 0.15s ease; }
+        .guru-img-wrapper::after { content: ''; position: absolute; top: -18%; left: -18%; right: -18%; bottom: -18%; border-radius: 50%; border: 1px solid rgba(252, 163, 77, 0.1); border-top: min(2px, 0.4dvh) solid rgba(252, 163, 77, 0.9); box-shadow: 0 -2px 10px rgba(252, 163, 77, 0.5); animation: spinLeft 8s linear infinite; transition: all 0.15s ease; }
+        .guru-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: min(2px, 0.4dvh) solid var(--accent); box-shadow: 0 0 15px rgba(252, 163, 77, 0.3); position: relative; z-index: 2; transition: all 0.15s ease; }
 
         @keyframes spinRight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
@@ -88,37 +88,49 @@
         .guru-img-wrapper.tapped::before { border-color: #FFFFFF; transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
         .guru-img-wrapper.tapped::after { border-top-color: #FFFFFF; box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.8); transform: scale(1.05); }
         .guru-img-wrapper.tapped img { box-shadow: 0 0 25px rgba(252, 163, 77, 0.8); }
-        .guru-text { color: var(--accent); font-size: min(15px, 2vh); font-weight: 600; transition: opacity 0.5s; }
+        .guru-text { color: var(--accent); font-size: min(18px, 2.5dvh); font-weight: 600; transition: opacity 0.5s; }
 
-        /* Grid Section - Made flexible so it compresses if screen is short */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: min(10px, 1.2vh); margin: min(10px, 1vh) 0; transition: opacity 0.5s ease; flex-shrink: 1; align-content: center; }
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 14px; padding: min(8px, 1vh) 4px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .card img { width: min(60px, 7.5vh); height: min(60px, 7.5vh); border-radius: 50%; margin-bottom: 4px; object-fit: cover; }
-        .card-title { color: var(--accent); font-size: min(13px, 1.5vh); font-weight: bold; margin-bottom: 2px; }
-        .card-subtitle { color: #D1D1D1; font-size: min(10px, 1.2vh); margin-bottom: 2px; }
-        .card-text { color: var(--text-muted); font-size: min(10px, 1.2vh); line-height: 1.2; }
+        /* Grid Section: The Flexible Spring (flex: 1) 
+           This will stretch to fill giant iPads, and instantly squash on tiny iPhones without overlapping */
+        .grid { 
+            flex: 1; min-height: 0; 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: min(12px, 1.5dvh); 
+            align-content: center; /* Centers the grid vertically in the leftover space */
+            margin: min(10px, 1.5dvh) 0; transition: opacity 0.5s ease; 
+        }
+        .card { background: var(--card-bg); border: 1px solid #333; border-radius: min(16px, 2dvh); padding: min(10px, 1.2dvh) 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .card img { width: min(75px, 8.5dvh); height: min(75px, 8.5dvh); border-radius: 50%; margin-bottom: min(6px, 0.8dvh); object-fit: cover; }
+        .card-title { color: var(--accent); font-size: min(14px, 1.8dvh); font-weight: bold; margin-bottom: 2px; }
+        .card-subtitle { color: #D1D1D1; font-size: min(11px, 1.4dvh); margin-bottom: 2px; }
+        .card-text { color: var(--text-muted); font-size: min(11px, 1.4dvh); line-height: 1.2; }
 
-        /* Controls */
-        .controls { display: flex; gap: 15px; margin-bottom: min(10px, 1.5vh); transition: opacity 0.5s ease; flex-shrink: 0; }
-        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(16px, 2vh); border-radius: 14px; font-size: min(16px, 2vh); font-weight: 600; cursor: pointer; }
+        /* Controls: Strictly 10% of height */
+        .controls { display: flex; gap: min(15px, 2vw); margin-bottom: min(10px, 1.5dvh); transition: opacity 0.5s ease; flex-shrink: 0; }
+        .control-btn { flex: 1; background: var(--btn-gray); border: none; padding: min(20px, 2.5dvh); border-radius: min(14px, 2dvh); font-size: min(18px, 2.2dvh); font-weight: 600; cursor: pointer; }
         .btn-reset { color: #FFFFFF; }
         .btn-fix { color: var(--red); }
         .control-btn:active { opacity: 0.7; transform: scale(0.98); }
         
-        .tap-btn { width: 100%; background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); border: none; padding: min(22px, 2.8vh); border-radius: 18px; color: #FFFFFF; font-size: min(22px, 2.8vh); font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); flex-shrink: 0; transition: opacity 0.5s ease; }
+        /* Tap Button: Strictly 12% of height */
+        .tap-btn { 
+            width: 100%; height: min(85px, 10dvh); background: linear-gradient(180deg, #FFB75E 0%, #FCA34D 100%); 
+            border: none; border-radius: min(18px, 2.5dvh); color: #FFFFFF; 
+            font-size: min(26px, 3.5dvh); font-weight: bold; cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(252, 163, 77, 0.2); flex-shrink: 0; transition: opacity 0.5s ease; 
+        }
         .tap-btn:active { transform: scale(0.97); }
 
         /* ZEN MODE STYLING */
         body.zen-mode .grid, body.zen-mode .controls, body.zen-mode .tap-btn, body.zen-mode .guru-text { opacity: 0; pointer-events: none; visibility: hidden; }
         body.zen-mode .save-log, body.zen-mode .history-btn { opacity: 0; pointer-events: none; }
-        body.zen-mode .guru-section { transform: scale(1.4) translateY(8vh); }
-        body.zen-mode .cycles-wrapper { transform: translateY(4vh); }
+        body.zen-mode .guru-section { transform: scale(1.4) translateY(8dvh); }
+        body.zen-mode .cycles-wrapper { transform: translateY(4dvh); }
 
         /* Floating +1 & Majestic Particles */
-        .floating-number { position: fixed; color: #FFFFFF; font-size: 28px; font-weight: 900; text-shadow: 0 0 15px var(--accent), 0 0 5px var(--accent); pointer-events: none; z-index: 9999; animation: floatUpFade 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .floating-number { position: fixed; color: #FFFFFF; font-size: min(32px, 4dvh); font-weight: 900; text-shadow: 0 0 15px var(--accent), 0 0 5px var(--accent); pointer-events: none; z-index: 9999; animation: floatUpFade 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         @keyframes floatUpFade { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-70px) scale(1.4); } }
         
-        .golden-particle { position: fixed; top: 50%; left: 50%; width: 6px; height: 6px; background: #FFF; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 12px #FCA34D, 0 0 25px #FCA34D; animation: majesticExplode 3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+        .golden-particle { position: fixed; top: 50%; left: 50%; width: min(6px, 1dvh); height: min(6px, 1dvh); background: #FFF; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 12px #FCA34D, 0 0 25px #FCA34D; animation: majesticExplode 3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
         @keyframes majesticExplode { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 60% { opacity: 0.8; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity: 0; } }
 
         /* --- DETAILED DASHBOARD & MODAL STYLES --- */
@@ -131,24 +143,21 @@
         .dash-card { background: var(--card-bg); border: 1px solid #333; border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .dash-header { color: var(--accent); font-size: 16px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Ring Section */
         .dashboard-ring-sec { display: flex; align-items: center; justify-content: space-between; }
         .dash-text h3 { color: #FFF; font-size: 18px; margin-bottom: 5px; }
         .dash-text p { color: var(--text-muted); font-size: 14px; }
         .progress-ring { position: relative; width: 80px; height: 80px; }
-        .progress-ring svg { transform: rotate(-90deg); }
+        .progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .ring-bg { stroke: #333; stroke-width: 6; fill: transparent; }
-        .ring-fill { stroke: var(--accent); stroke-width: 6; fill: transparent; stroke-dasharray: 201; stroke-dashoffset: 201; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); stroke-linecap: round; }
+        .ring-fill { stroke: var(--accent); stroke-width: 6; fill: transparent; stroke-dasharray: 251.2; stroke-dashoffset: 251.2; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); stroke-linecap: round; }
         .ring-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; }
 
-        /* Chart Section */
         .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 130px; padding-top: 15px; }
         .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; gap: 8px;}
         .chart-bar { width: min(24px, 5vw); background: linear-gradient(180deg, #FCA34D 0%, #FF453A 100%); border-radius: 6px 6px 0 0; position: relative; transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chart-value { font-size: 10px; color: #FFF; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-weight: bold; }
         .chart-label { font-size: 11px; color: var(--text-muted); }
 
-        /* Stats Grid */
         .stats-row { display: flex; gap: 15px; margin-bottom: 25px; }
         .stat-box { flex: 1; background: var(--btn-gray); border-radius: 12px; padding: 15px; text-align: center; border: 1px solid #333; }
         .stat-box h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500;}
@@ -177,7 +186,6 @@
 </head>
 <body>
 
-    <!-- INTRO SPLASH SCREEN -->
     <div class="intro-screen" id="introScreen">
         <div class="intro-guru-wrapper">
             <div class="intro-rings"></div>
@@ -187,7 +195,6 @@
         <div class="intro-hint">Tap Anywhere to Enter</div>
     </div>
 
-    <!-- MAIN APP -->
     <div class="app-container" id="appContainer">
         <div class="top-bar">
             <span class="save-log" id="saveLogBtn">Save Log</span>
@@ -224,7 +231,7 @@
         
         <button class="tap-btn" id="tapButton">TAP TO COUNT</button>
 
-        <!-- DETAILED DASHBOARD MODAL -->
+        <!-- DASHBOARD -->
         <div class="modal" id="historyModal">
             <div class="modal-content-scroll">
                 <div class="modal-header"><span>Dashboard</span><span class="close-modal" id="closeHistoryBtn">Close</span></div>
@@ -236,7 +243,7 @@
                             <p>108 Jaap target</p>
                         </div>
                         <div class="progress-ring">
-                            <svg width="80" height="80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" id="ringFill" cx="40" cy="40" r="32"/></svg>
+                            <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="40"/><circle class="ring-fill" id="ringFill" cx="50" cy="50" r="40"/></svg>
                             <div class="ring-text" id="ringText">0%</div>
                         </div>
                     </div>
@@ -255,12 +262,12 @@
                 <div class="dash-header">Recent Logs</div>
                 <div class="history-list" id="historyList"></div>
                 
-                <button class="clear-history" id="clearHistoryBtn" style="margin-top:15px; width: 100%;">Clear All History</button>
+                <button class="control-btn" id="clearHistoryBtn" style="margin-top:15px; width: 100%; background:var(--red);">Clear All History</button>
             </div>
         </div>
     </div>
 
-    <!-- UI Overlays -->
+    <!-- Overlays -->
     <div id="toast" class="toast"></div>
     
     <div class="confirm-overlay" id="confirmOverlay">
@@ -541,7 +548,8 @@
             const ring = document.getElementById('ringFill');
             const ringText = document.getElementById('ringText');
             const percent = Math.min((dailyData.total / 108) * 100, 100);
-            ring.style.strokeDashoffset = 201 - (201 * percent) / 100;
+            // Circumference of SVG circle with r=40 is 2 * pi * 40 = 251.2
+            ring.style.strokeDashoffset = 251.2 - (251.2 * percent) / 100;
             ringText.innerText = Math.floor(percent) + '%';
             generateDashboardStats();
             renderHistory();
@@ -555,7 +563,7 @@
                 historyLogs = []; dailyData.total = 0;
                 localStorage.setItem('sacredJaapHistory', JSON.stringify(historyLogs));
                 updateDisplay(); 
-                document.getElementById('ringFill').style.strokeDashoffset = 201;
+                document.getElementById('ringFill').style.strokeDashoffset = 251.2;
                 document.getElementById('ringText').innerText = '0%';
                 generateDashboardStats(); renderHistory();
                 showToast("History cleared.");
